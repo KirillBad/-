@@ -1,0 +1,30 @@
+@startuml
+
+class GasContainer {
+    + Volume: double
+    + Mass: double
+    + Molar: double
+    - R: double = 8.31
+    + GasContainer(volume: double, mass: double, molar: double)
+    + GetPressure(T: int): double
+    + AmountOfMatter(): double
+    + ToString(): string
+}
+
+interface IGasContainerTarget {
+    + ModifVolume(dV: double): void
+    + GetDp(T0: int, T1: int): double
+    + Passport(): string
+}
+
+class GasContainerAdapter {
+    + GasContainerAdapter(volume: double, mass: double, molar: double)
+    + ModifVolume(dV: double): void
+    + GetDp(T0: int, T1: int): double
+    + Passport(): string
+}
+
+GasContainer <|-- GasContainerAdapter
+IGasContainerTarget <|.. GasContainerAdapter
+
+@enduml

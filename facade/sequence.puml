@@ -1,0 +1,44 @@
+@startuml
+actor User
+participant "Program" as Main
+participant "CalorieCalculatorFacade" as Facade
+participant "ActivityCalculator" as Activity
+participant "Ectomorph/\nMesomorph/\nEndomorph" as Concrete
+
+User -> Main: Запуск программы
+activate Main
+
+Main -> Facade: new CalorieCalculatorFacade()
+activate Facade
+
+Facade -> Activity: new ActivityCalculator()
+
+Main -> Facade: CalculateDailyCalories\n(height, weight, age,\ngender, activityLevel, bodyType)
+activate Facade
+
+alt bodyType == "астеник"
+    Facade -> Concrete: new Ectomorph(height, weight, age, gender)
+else bodyType == "нормостеник"
+    Facade -> Concrete: new Mesomorph(height, weight, age, gender)
+else bodyType == "гиперстеник"
+    Facade -> Concrete: new Endomorph(height, weight, age, gender)
+end
+
+Facade -> Concrete: CalculateBasalMetabolicRate()
+activate Concrete
+Concrete --> Facade: bmr
+deactivate Concrete
+
+Facade -> Activity: GetActivityMultiplier(activityLevel)
+activate Activity
+Activity --> Facade: multiplier
+deactivate Activity
+
+Facade -> Facade: Math.Round(bmr * multiplier, 2)
+Facade --> Main: calories
+deactivate Facade
+
+Main -> User: Вывод результата
+deactivate Main
+
+@enduml

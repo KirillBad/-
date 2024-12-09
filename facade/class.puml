@@ -1,0 +1,56 @@
+@startuml
+
+enum Gender {
+    Male
+    Female
+}
+
+enum ActivityLevel {
+    Low
+    Medium
+    High
+}
+
+abstract class BodyType {
+    # height: double
+    # weight: double
+    # age: int
+    # gender: Gender
+    --
+    + BodyType(double, double, int, Gender)
+    + {abstract} CalculateBasalMetabolicRate(): double
+}
+
+class Ectomorph {
+    + CalculateBasalMetabolicRate(): double
+}
+
+class Mesomorph {
+    + CalculateBasalMetabolicRate(): double
+}
+
+class Endomorph {
+    + CalculateBasalMetabolicRate(): double
+}
+
+class ActivityCalculator {
+    + GetActivityMultiplier(ActivityLevel): double
+}
+
+class CalorieCalculatorFacade {
+    - activityCalculator: ActivityCalculator
+    --
+    + CalorieCalculatorFacade()
+    + CalculateDailyCalories(double, double, int, Gender, ActivityLevel, string): double
+}
+
+BodyType <|-- Ectomorph
+BodyType <|-- Mesomorph
+BodyType <|-- Endomorph
+CalorieCalculatorFacade o--> ActivityCalculator
+
+' Связи с перечислениями
+ActivityCalculator ..> ActivityLevel : uses
+CalorieCalculatorFacade ..> Gender : uses
+
+@enduml

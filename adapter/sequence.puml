@@ -1,0 +1,45 @@
+@startuml
+actor Client
+participant "target:IGasContainerTarget" as Interface
+participant "adapter:GasContainerAdapter" as Adapter
+participant "GasContainer" as Container
+
+Client -> Adapter: new GasContainerAdapter(volume, mass, molar)
+activate Adapter
+Adapter -> Container: base(volume, mass, molar)
+deactivate Adapter
+
+Client -> Interface: Passport()
+activate Interface
+Interface -> Adapter: Passport()
+activate Adapter
+Adapter -> Container: ToString()
+Container --> Adapter: string
+Adapter --> Interface: string
+Interface --> Client: string
+deactivate Adapter
+deactivate Interface
+
+Client -> Interface: ModifVolume(dV)
+activate Interface
+Interface -> Adapter: ModifVolume(dV)
+activate Adapter
+Adapter -> Adapter: Volume += dV
+deactivate Adapter
+deactivate Interface
+
+Client -> Interface: GetDp(T0, T1)
+activate Interface
+Interface -> Adapter: GetDp(T0, T1)
+activate Adapter
+Adapter -> Container: GetPressure(T1)
+Container --> Adapter: pressure1
+Adapter -> Container: GetPressure(T0)
+Container --> Adapter: pressure2
+Adapter -> Adapter: pressure1 - pressure2
+Adapter --> Interface: double
+Interface --> Client: double
+deactivate Adapter
+deactivate Interface
+
+@enduml
