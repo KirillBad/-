@@ -1,0 +1,74 @@
+@startuml
+actor Client
+participant "movie:Movie" as Movie
+participant "russianFactory:RussianMovieFactory" as RussianFactory
+participant "englishFactory:EnglishMovieFactory" as EnglishFactory
+participant "russianAudio:RussianAudioTrack" as RussianAudio
+participant "russianSubs:RussianSubtitles" as RussianSubs
+participant "englishAudio:EnglishAudioTrack" as EnglishAudio
+participant "englishSubs:EnglishSubtitles" as EnglishSubs
+
+Client -> Movie **: new Movie("Матрица")
+activate Movie
+
+Client -> Movie: ConfigureLanguage(russianFactory)
+activate Movie
+Movie -> RussianFactory: CreateAudioTrack()
+activate RussianFactory
+RussianFactory --> RussianAudio **: create
+RussianFactory --> Movie: russianAudio
+deactivate RussianFactory
+
+Movie -> RussianFactory: CreateSubtitles()
+activate RussianFactory
+RussianFactory --> RussianSubs **: create
+RussianFactory --> Movie: russianSubs
+deactivate RussianFactory
+deactivate Movie
+
+Client -> Movie: ShowInfo()
+activate Movie
+Movie -> RussianAudio: GetLanguage()
+activate RussianAudio
+RussianAudio --> Movie: "Русский"
+deactivate RussianAudio
+
+Movie -> RussianSubs: GetLanguage()
+activate RussianSubs
+RussianSubs --> Movie: "Русский"
+deactivate RussianSubs
+Movie --> Client: Вывод информации
+deactivate Movie
+
+note over Movie: Смена языка
+
+Client -> Movie: ConfigureLanguage(englishFactory)
+activate Movie
+Movie -> EnglishFactory: CreateAudioTrack()
+activate EnglishFactory
+EnglishFactory --> EnglishAudio **: create
+EnglishFactory --> Movie: englishAudio
+deactivate EnglishFactory
+
+Movie -> EnglishFactory: CreateSubtitles()
+activate EnglishFactory
+EnglishFactory --> EnglishSubs **: create
+EnglishFactory --> Movie: englishSubs
+deactivate EnglishFactory
+deactivate Movie
+
+Client -> Movie: ShowInfo()
+activate Movie
+Movie -> EnglishAudio: GetLanguage()
+activate EnglishAudio
+EnglishAudio --> Movie: "Английский"
+deactivate EnglishAudio
+
+Movie -> EnglishSubs: GetLanguage()
+activate EnglishSubs
+EnglishSubs --> Movie: "Английский"
+deactivate EnglishSubs
+Movie --> Client: Вывод информации
+deactivate Movie
+
+@enduml

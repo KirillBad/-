@@ -1,0 +1,70 @@
+@startuml
+' Абстрактные классы
+abstract class MovieLanguageFactory {
+    + {abstract} CreateAudioTrack(): AudioTrack
+    + {abstract} CreateSubtitles(): Subtitles
+}
+
+abstract class AudioTrack {
+    + {abstract} GetLanguage(): string
+}
+
+abstract class Subtitles {
+    + {abstract} GetLanguage(): string
+}
+
+' Конкретные фабрики
+class RussianMovieFactory {
+    + CreateAudioTrack(): AudioTrack
+    + CreateSubtitles(): Subtitles
+}
+
+class EnglishMovieFactory {
+    + CreateAudioTrack(): AudioTrack
+    + CreateSubtitles(): Subtitles
+}
+
+' Конкретные продукты
+class RussianAudioTrack {
+    + GetLanguage(): string
+}
+
+class EnglishAudioTrack {
+    + GetLanguage(): string
+}
+
+class RussianSubtitles {
+    + GetLanguage(): string
+}
+
+class EnglishSubtitles {
+    + GetLanguage(): string
+}
+
+' Основной класс
+class Movie {
+    + Title: string
+    + Movie(title: string)
+    + ConfigureLanguage(factory: MovieLanguageFactory): void
+    + ShowInfo(): void
+}
+
+' Отношения
+MovieLanguageFactory <|-- RussianMovieFactory
+MovieLanguageFactory <|-- EnglishMovieFactory
+
+AudioTrack <|-- RussianAudioTrack
+AudioTrack <|-- EnglishAudioTrack
+Subtitles <|-- RussianSubtitles
+Subtitles <|-- EnglishSubtitles
+
+Movie --> MovieLanguageFactory: uses
+
+MovieLanguageFactory ..> AudioTrack: creates
+MovieLanguageFactory ..> Subtitles: creates
+
+RussianMovieFactory ..> RussianAudioTrack: creates
+RussianMovieFactory ..> RussianSubtitles: creates
+EnglishMovieFactory ..> EnglishAudioTrack: creates
+EnglishMovieFactory ..> EnglishSubtitles: creates
+@enduml
