@@ -1,0 +1,38 @@
+@startuml
+actor Client
+participant "Client Code" as Code
+participant "Organization" as Org <<abstract>>
+participant "Concrete Organization" as ConcreteOrg
+
+' Создание организации
+Client -> Code: Запрос на работу с организацией
+activate Code
+
+Code -> ConcreteOrg **: Создание организации\n(name, address, employeeCount)
+activate ConcreteOrg
+ConcreteOrg -> Org: Инициализация базового класса
+ConcreteOrg --> Code: Экземпляр организации
+deactivate ConcreteOrg
+
+' Базовые операции с организацией
+Code -> ConcreteOrg: Получение базовой информации\n(getName, getAddress)
+activate ConcreteOrg
+ConcreteOrg --> Code: Базовая информация
+deactivate ConcreteOrg
+
+' Специфические операции
+Code -> ConcreteOrg: Выполнение специфических операций\n(согласно интерфейсу)
+activate ConcreteOrg
+ConcreteOrg --> Code: Результат операции
+deactivate ConcreteOrg
+
+' Получение выручки
+Code -> ConcreteOrg: getRevenue()
+activate ConcreteOrg
+ConcreteOrg --> Code: Выручка организации
+deactivate ConcreteOrg
+
+Code --> Client: Результат работы
+deactivate Code
+
+@enduml

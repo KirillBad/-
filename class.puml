@@ -1,0 +1,85 @@
+@startuml Organization
+
+' Интерфейсы
+interface IOrganization {
+    +getName(): string
+    +setName(value: string): void
+    +getAddress(): string
+    +setAddress(value: string): void
+    +getEmployeeCount(): int
+    +setEmployeeCount(value: int): void
+    +getRevenue(): decimal
+}
+
+interface IInsurable {
+    +CalculateInsurancePremium(): decimal
+    +ProcessClaim(amount: decimal): void
+}
+
+interface IManufacturing {
+    +getProductionCapacity(): int
+    +setProductionCapacity(value: int): void
+    +StartProduction(): void
+    +StopProduction(): void
+}
+
+interface IResourceExtraction {
+    +getResourceReserves(): decimal
+    +setResourceReserves(value: decimal): void
+    +ExtractResources(amount: decimal): decimal
+}
+
+' Абстрактный класс
+abstract class Organization {
+    -_name: string
+    -_address: string
+    -_employeeCount: int
+    +getName(): string
+    +setName(value: string): void
+    +getAddress(): string
+    +setAddress(value: string): void
+    +getEmployeeCount(): int
+    +setEmployeeCount(value: int): void
+    +{abstract} getRevenue(): decimal
+}
+
+' Конкретные классы
+class InsuranceCompany {
+    -_totalPremiums: decimal
+    -_totalClaims: decimal
+    +CalculateInsurancePremium(): decimal
+    +ProcessClaim(amount: decimal): void
+    +getRevenue(): decimal
+}
+
+class Factory {
+    -_isProducing: bool
+    -_revenuePerUnit: decimal
+    + ProductionCapacity: int
+    +getProductionCapacity(): int
+    +setProductionCapacity(value: int): void
+    +StartProduction(): void
+    +StopProduction(): void
+    +getRevenue(): decimal
+}
+
+class OilGasCompany {
+    -_extractionPrice: decimal
+    -_totalExtracted: decimal
+    + ResourceReserves: decimal
+    +getResourceReserves(): decimal
+    +setResourceReserves(value: decimal): void
+    +ExtractResources(amount: decimal): decimal
+    +getRevenue(): decimal
+}
+
+' Связи
+Organization ..|> IOrganization
+InsuranceCompany --|> Organization
+InsuranceCompany ..|> IInsurable
+Factory --|> Organization
+Factory ..|> IManufacturing
+OilGasCompany --|> Organization
+OilGasCompany ..|> IResourceExtraction
+
+@enduml
