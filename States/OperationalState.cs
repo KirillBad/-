@@ -1,36 +1,36 @@
-using System;
-using System.Windows.Forms;
-
 public class OperationalState : IState
 {
     public void EnterPin(ATM atm, string pin)
     {
-        MessageBox.Show("PIN уже введен");
+        atm.SetMessage("PIN уже введен");
     }
 
     public void WithdrawMoney(ATM atm, decimal amount)
     {
         if (atm.TryWithdraw(amount))
         {
-            MessageBox.Show($"Выдано {amount:C}");
+            atm.SetMessage($"Выдано {amount}$");
             if (atm.TotalMoney == 0)
             {
                 atm.SetState(new BlockedState());
+                atm.SetMessage("В банкомате нет денег");
             }
         }
         else
         {
-            MessageBox.Show("Недостаточно средств");
+            atm.SetMessage("Недостаточно средств");
         }
     }
 
     public void FinishWork(ATM atm)
     {
-        atm.SetState(new WaitingState());
+        atm.SetState(new AuthenticationState());
+        atm.SetMessage("До свидания!");
     }
 
     public void LoadMoney(ATM atm, decimal amount)
     {
-        MessageBox.Show("Завершите текущую сессию");
+        atm.AddMoney(amount);
+        atm.SetMessage($"Загружено {amount}$");
     }
 } 

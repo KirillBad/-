@@ -5,26 +5,23 @@ public class BlockedState : IState
 {
     public void EnterPin(ATM atm, string pin)
     {
-        MessageBox.Show("Банкомат заблокирован");
+        atm.SetMessage("В банкомате нет денег");
     }
 
     public void WithdrawMoney(ATM atm, decimal amount)
     {
-        MessageBox.Show("Банкомат заблокирован");
+        atm.SetMessage("В банкомате нет денег");
     }
 
     public void FinishWork(ATM atm)
     {
-        MessageBox.Show("Банкомат заблокирован");
+        atm.SetMessage("В банкомате нет денег");
     }
 
     public void LoadMoney(ATM atm, decimal amount)
     {
         atm.AddMoney(amount);
-        if (atm.TotalMoney > 0)
-        {
-            atm.SetState(new WaitingState());
-            MessageBox.Show($"Загружено {amount:C}. Банкомат разблокирован");
-        }
+        atm.SetState(new OperationalState());
+        atm.SetMessage($"Загружено {amount:C}. Банкомат разблокирован");
     }
 } 

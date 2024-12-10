@@ -1,39 +1,30 @@
-using System;
-using System.Windows.Forms;
-
 public class AuthenticationState : IState
 {
-    private int attempts = 3;
-
     public void EnterPin(ATM atm, string pin)
     {
-        if (pin == "1234") // Для примера используем фиксированный PIN
+        if (pin == "1234")
         {
             atm.SetState(new OperationalState());
+            atm.SetMessage("Здравствуйте!");
         }
         else
         {
-            attempts--;
-            if (attempts <= 0)
-            {
-                atm.SetState(new BlockedState());
-            }
-            MessageBox.Show($"Неверный PIN. Осталось попыток: {attempts}");
+            atm.SetMessage("Неверный PIN.");
         }
     }
 
     public void WithdrawMoney(ATM atm, decimal amount)
     {
-        MessageBox.Show("Сначала завершите аутентификацию");
+        atm.SetMessage("Сначала завершите аутентификацию");
     }
 
     public void FinishWork(ATM atm)
     {
-        atm.SetState(new WaitingState());
+        atm.SetMessage("Сначала завершите аутентификацию");
     }
 
     public void LoadMoney(ATM atm, decimal amount)
     {
-        MessageBox.Show("Невозможно загрузить деньги в текущем состоянии");
+        atm.SetMessage("Невозможно загрузить деньги в текущем состоянии");
     }
 } 

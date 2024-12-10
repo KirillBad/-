@@ -1,27 +1,27 @@
-using System;
-using System.Windows.Forms;
-
 public class WaitingState : IState
 {
     public void EnterPin(ATM atm, string pin)
     {
-        atm.SetState(new AuthenticationState());
-        // Можно добавить событие для обновления UI
+        atm.SetMessage("Связь восстановлена");
+        atm.SetState(atm._previousState);
     }
 
     public void WithdrawMoney(ATM atm, decimal amount)
     {
-        MessageBox.Show("Сначала введите PIN-код");
+        atm.SetMessage("Связь восстановлена");
+        atm.SetState(atm._previousState);
+
     }
 
     public void FinishWork(ATM atm)
     {
-        // Уже в состоянии ожидания
+        atm.SetMessage("Связь восстановлена");
+        atm.SetState(new AuthenticationState());
     }
 
     public void LoadMoney(ATM atm, decimal amount)
     {
-        atm.AddMoney(amount);
-        MessageBox.Show($"Загружено {amount:C}");
+        atm.SetMessage("Связь восстановлена");
+        atm.SetState(atm._previousState);
     }
 } 
