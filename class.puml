@@ -1,85 +1,51 @@
-@startuml Organization
-
-' Интерфейсы
-interface IOrganization {
-    +getName(): string
-    +setName(value: string): void
-    +getAddress(): string
-    +setAddress(value: string): void
-    +getEmployeeCount(): int
-    +setEmployeeCount(value: int): void
-    +getRevenue(): decimal
+@startuml
+interface IObserver {
+    + Update()
 }
 
-interface IInsurable {
-    +CalculateInsurancePremium(): decimal
-    +ProcessClaim(amount: decimal): void
+abstract class Observable {
+    # _observers: List<IObserver>
+    + AddObserver(observer: IObserver)
+    # NotifyUpdate()
 }
 
-interface IManufacturing {
-    +getProductionCapacity(): int
-    +setProductionCapacity(value: int): void
-    +StartProduction(): void
-    +StopProduction(): void
+class OrganizationModel {
+    - _name: string
+    - _address: string
+    - _employeeCount: int
+    - _revenue: decimal
+    - _premiumCount: int
+    + Name: string
+    + Address: string
+    + EmployeeCount: int
+    + Revenue: decimal
+    + PremiumCount: int
+    + CalculateInsurancePremium(): decimal
+    + ProcessClaim(amount: decimal)
 }
 
-interface IResourceExtraction {
-    +getResourceReserves(): decimal
-    +setResourceReserves(value: decimal): void
-    +ExtractResources(amount: decimal): decimal
+class OrganizationController {
+    - _model: OrganizationModel
+    + SetName(name: string)
+    + SetAddress(address: string)
+    + SetEmployeeCount(count: int)
+    + CalculateInsurancePremium(): decimal
+    + ProcessClaim(amount: decimal)
 }
 
-' Абстрактный класс
-abstract class Organization {
-    -_name: string
-    -_address: string
-    -_employeeCount: int
-    +getName(): string
-    +setName(value: string): void
-    +getAddress(): string
-    +setAddress(value: string): void
-    +getEmployeeCount(): int
-    +setEmployeeCount(value: int): void
-    +{abstract} getRevenue(): decimal
+class Form1 {
+    - _controller: OrganizationController
+    - _model: OrganizationModel
+    - _lastPremium: decimal
+    + Update()
+    - UpdateRevenueLabel()
+    - btnSave_Click()
+    - btnCalculate_Click()
+    - btnProcess_Click()
 }
 
-' Конкретные классы
-class InsuranceCompany {
-    -_totalPremiums: decimal
-    -_totalClaims: decimal
-    +CalculateInsurancePremium(): decimal
-    +ProcessClaim(amount: decimal): void
-    +getRevenue(): decimal
-}
-
-class Factory {
-    -_isProducing: bool
-    -_revenuePerUnit: decimal
-    + ProductionCapacity: int
-    +getProductionCapacity(): int
-    +setProductionCapacity(value: int): void
-    +StartProduction(): void
-    +StopProduction(): void
-    +getRevenue(): decimal
-}
-
-class OilGasCompany {
-    -_extractionPrice: decimal
-    -_totalExtracted: decimal
-    + ResourceReserves: decimal
-    +getResourceReserves(): decimal
-    +setResourceReserves(value: decimal): void
-    +ExtractResources(amount: decimal): decimal
-    +getRevenue(): decimal
-}
-
-' Связи
-Organization ..|> IOrganization
-InsuranceCompany --|> Organization
-InsuranceCompany ..|> IInsurable
-Factory --|> Organization
-Factory ..|> IManufacturing
-OilGasCompany --|> Organization
-OilGasCompany ..|> IResourceExtraction
-
+Observable <|-- OrganizationModel
+IObserver <|.. Form1
+Form1 --> OrganizationController
+OrganizationController --> OrganizationModel
 @enduml

@@ -1,38 +1,58 @@
 @startuml
-actor Client
-participant "Client Code" as Code
-participant "Organization" as Org <<abstract>>
-participant "Concrete Organization" as ConcreteOrg
+actor User
+participant "Form1\n(View)" as View
+participant "OrganizationController\n(Controller)" as Controller
+participant "OrganizationModel\n(Model)" as Model
 
-' Создание организации
-Client -> Code: Запрос на работу с организацией
-activate Code
+note over User, Model: Сценарий 1: Сохранение данных
+User -> View: Ввод данных
+User -> View: Нажатие "Сохранить данные"
+activate View
+View -> Controller: SetName(name)
+activate Controller
+Controller -> Model: Name = value
+activate Model
+Model -> Model: NotifyUpdate()
+Model -> View: Update()
+View -> View: UpdateRevenueLabel()
+deactivate Model
+deactivate Controller
+View --> User: Сообщение "Данные сохранены"
+deactivate View
 
-Code -> ConcreteOrg **: Создание организации\n(name, address, employeeCount)
-activate ConcreteOrg
-ConcreteOrg -> Org: Инициализация базового класса
-ConcreteOrg --> Code: Экземпляр организации
-deactivate ConcreteOrg
+note over User, Model: Сценарий 2: Расчет премии
+User -> View: Нажатие "Рассчитать премию"
+activate View
+View -> Controller: CalculateInsurancePremium()
+activate Controller
+Controller -> Model: CalculateInsurancePremium()
+activate Model
+Model -> Model: Revenue += premium
+Model -> Model: PremiumCount++
+Model -> Model: NotifyUpdate()
+Model -> View: Update()
+View -> View: UpdateRevenueLabel()
+Model --> Controller: return premium
+deactivate Model
+Controller --> View: return premium
+deactivate Controller
+View --> User: Сообщение о премии
+deactivate View
 
-' Базовые операции с организацией
-Code -> ConcreteOrg: Получение базовой информации\n(getName, getAddress)
-activate ConcreteOrg
-ConcreteOrg --> Code: Базовая информация
-deactivate ConcreteOrg
-
-' Специфические операции
-Code -> ConcreteOrg: Выполнение специфических операций\n(согласно интерфейсу)
-activate ConcreteOrg
-ConcreteOrg --> Code: Результат операции
-deactivate ConcreteOrg
-
-' Получение выручки
-Code -> ConcreteOrg: getRevenue()
-activate ConcreteOrg
-ConcreteOrg --> Code: Выручка организации
-deactivate ConcreteOrg
-
-Code --> Client: Результат работы
-deactivate Code
+note over User, Model: Сценарий 3: Обработка претензии
+User -> View: Нажатие "Обработать претензию"
+activate View
+View -> Controller: ProcessClaim(amount)
+activate Controller
+Controller -> Model: ProcessClaim(amount)
+activate Model
+Model -> Model: Revenue -= amount
+Model -> Model: NotifyUpdate()
+Model -> View: Update()
+View -> View: UpdateRevenueLabel()
+deactivate Model
+deactivate Controller
+View --> User: Сообщение о претензии
+deactivate View
 
 @enduml
