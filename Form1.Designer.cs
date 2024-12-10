@@ -31,7 +31,6 @@ partial class Form1
         labelStatus = new Label();
         labelBalance = new Label();
         panelOperations = new Panel();
-        buttonExit = new Button();
         buttonWithdraw = new Button();
         buttonLoad = new Button();
         textBoxAmount = new TextBox();
@@ -39,6 +38,7 @@ partial class Form1
         buttonEnterPin = new Button();
         textBoxPin = new TextBox();
         labelMessage = new Label();
+        buttonExit = new Button();
         panelOperations.SuspendLayout();
         panelAuth.SuspendLayout();
         SuspendLayout();
@@ -78,16 +78,6 @@ partial class Form1
         panelOperations.Name = "panelOperations";
         panelOperations.Size = new Size(384, 295);
         panelOperations.TabIndex = 2;
-        // 
-        // buttonExit
-        // 
-        buttonExit.Location = new Point(116, 244);
-        buttonExit.Name = "buttonExit";
-        buttonExit.Size = new Size(151, 33);
-        buttonExit.TabIndex = 4;
-        buttonExit.Text = "Выйти";
-        buttonExit.UseVisualStyleBackColor = true;
-        buttonExit.Click += buttonExit_Click;
         // 
         // buttonWithdraw
         // 
@@ -155,6 +145,16 @@ partial class Form1
         labelMessage.TabIndex = 3;
         labelMessage.Text = "labelMessage";
         labelMessage.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // buttonExit
+        // 
+        buttonExit.Location = new Point(116, 244);
+        buttonExit.Name = "buttonExit";
+        buttonExit.Size = new Size(151, 33);
+        buttonExit.TabIndex = 4;
+        buttonExit.Text = "Выйти";
+        buttonExit.UseVisualStyleBackColor = true;
+        buttonExit.Click += buttonExit_Click;
         // 
         // Form1
         // 
